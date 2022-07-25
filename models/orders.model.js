@@ -23,7 +23,6 @@ const Order = db.define('order', {
     quantity:{
         type:DataTypes.INTEGER,
         allowNull:false,
-        defaultValue:'active'
     },
     status:{
         type:DataTypes.STRING,
@@ -33,4 +32,4 @@ const Order = db.define('order', {
 });
 
 
-module.exports = { User}
+module.exports = { Order }
