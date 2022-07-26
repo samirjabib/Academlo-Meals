@@ -1,23 +1,26 @@
 const express = require('express');
 
 
-//Routes
-const { usersRouter } = require('./routes/user.router');
+//Utils
 const { AppError } = require('./utils/appError.util');
 
 
-//Global err controller
-const {globalErrorHandler } = require('./controllers/error.controller')
-
-
 const app = express(); //Init express
-
-
-
 app.use(express.json()); // Enable incoming JSON
 
 
 
+//Global err controller
+const {globalErrorHandler } = require('./controllers/error.controller');
+
+
+//Routes
+const { usersRouter } = require('./routes/user.router');
+
+
+
+//Endpoints
+app.use('/api/v1/users', usersRouter);
 
 //Hnadle incoming unknow routes to the server
 
