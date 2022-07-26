@@ -1,41 +1,95 @@
-const express = require('express');
 
-//Controllers
+//Models
 
+const { Restaurant } = require('../models/restaurants.model');
+const { Review } = require('../models/reviews.model');
 
-//Midlewares
+//Utils 
 
-const {
-    authentication,
-    protectUserAccount
-} = require('../middleware/auth.middleware');
+const { AppError } = require('../utils/appError.util');
+const { catchAsync } = require('../utils/catchAsync.util');
 
-const {
-    restaurantValidator
-} = require('../middleware/validators.middleware')
+const newRestaurant = catchAsync(
+    async (req, res ,next) =>{
+        
+        const { name, address, rating } = req.body;
 
+        const newRestaurant = await Restaurant.create({
+            name,
+            address,
+            rating
+        });
 
-//Router
+        res.status(200).json({
+            status:"success",
+            newRestaurant
+        })
+    }
+);
 
-const restaurantRouter = express.Router();
+const activeRestaurants = catchAsync(
+    async (req, res ,next) => {
+        
+        const restaurants = await Restaurant.findAll({
+            where:{status:"active"},
+        });
 
-//Endpoints
-
-restaurantRouter.post('/', //Create Restaurant
+        res.status(200).json({
+            status:"success",
+            restaurants
+        })
+    }
 )
 
-restaurantRouter.get('/', // get all restaurants active
+const getRestaurantById = catchAsync(
+    async (req, res ,next) => {
+        
+        const { restaurant } = req;
+
+        res.status(200).json({
+            status:"success",
+            restaurant
+        })
+    }
+)
+
+const updateRestaurant = catchAsync(
+    async (req, res ,next) =>{
+        //Only update name and address
+
+        const { restaurant } =req;
+        const { name, address } =req.body;
+
+        await restaurant.update({
+            status:"success",
+            restaurant
+        })
+    }
 )
 
 
-restaurantRouter.get('/:id', //get restaurant by id
+const closeRestaurant = catchAsync(
+    async (req, res, next) =>{
+        //only admin can do
 
+        const { restaurant } =req;
+
+        await restaurant.update({
+            status:"closed"
+        });
+
+        res.status(204).json({
+            status:"success"
+        });
+    }
 )
 
-restaurantRouter.patch('/:id', //update restaurant
 
-)
-
-restaurantRouter.delete('/:id', //Delete restaurant
-
-)
+module.exports = {
+    newRestaurant,
+    activeRestaurants,
+    getRestaurantById,
+    updateRestaurant,
+    closeRestaurant
+    
+}
