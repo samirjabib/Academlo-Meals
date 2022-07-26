@@ -64,6 +64,10 @@ const updateRestaurant = catchAsync(
             status:"success",
             restaurant
         })
+
+        res.status(204).json({
+            status:"success"
+        });
     }
 )
 
