@@ -1,7 +1,6 @@
 //Models
 
 const { Restaurant } = require('../models/restaurants.model');
-const { Review } = require("../models/reviews.model")
 
 //Utils
 

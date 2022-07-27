@@ -23,23 +23,29 @@ const mealsRouter = express.Router();
 
 
 mealsRouter.post('/:id', //Create Meal
-
+    authentication,
+    mealValidator,
+    newMeal
 )
 
 mealsRouter.get('/', //Get all meals active
-
+    getMeals
 )
 
 mealsRouter.get('/:id', //Get meal by id
-
+    getMealById
 )
 
 mealsRouter.patch('/:id', //Update Meals // Only admin
-
+    authentication,
+    isAdmin,
+    updateMeal
 )
 
 mealsRouter.delete('/:id', //Desactive Meals // Only admin
-
+    authentication,
+    isAdmin,
+    updateMeal
 )
 
 

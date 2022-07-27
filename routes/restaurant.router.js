@@ -8,19 +8,22 @@ const {
     getRestaurantById,
     newRestaurant,
     updateRestaurant,
+    addReview,
+    deleteReview,
+    updateReview,
 } = require('../controllers/restaurants.controller')
 
 //Midlewares
 
 const {
     authentication,
-    protectUserAccount,
     isAdmin
 } = require('../middleware/auth.middleware');
 
 const { restaurantValidator } = require('../middleware/validators.middleware')
 
 const { restaurantExist } = require('../middleware/restaurants.middleware')
+const { reviewExist, reviewOwner } = require('../middleware/reviews.middleware')
 
 //Router
 
@@ -56,6 +59,27 @@ restaurantRouter.delete('/:id', //Delete restaurant
     isAdmin,
     restaurantExist,
     closeRestaurant
+)
+
+restaurantRouter.post('/reviews/:restaurantId',  //Add Review
+    authentication,
+    addReview
+)
+
+restaurantRouter.patch('/reviews/:id', //update review
+    authentication,
+    reviewOwner,
+    reviewExist,
+    updateReview
+)
+
+
+
+restaurantRouter.patch('/reviews/:id', //Delete review
+    authentication,
+    reviewExist,
+    reviewOwner,
+    updateReview
 )
 
 module.exports = { restaurantRouter }

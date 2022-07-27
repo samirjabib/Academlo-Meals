@@ -5,6 +5,10 @@ const jwt = require('jsonwebtoken');
 //Models
 
 const { User } = require('../models/users.model');
+const { Meal } = require('../models/meals.model');
+const { Order } = require('../models/orders.model');
+const { Restaurant } = require('../models/restaurants.model');
+
 
 
 //Utils 
@@ -112,11 +116,85 @@ const deleteUser = catchAsync(
 )
 
 
+const getOrderByUser = catchAsync(
+    async (req, res ,next) => {
+
+        const { tokenId } = req;
+
+        const userOrders = await User.findOne({
+            where:{ id: tokenId },
+            where:{ status: 'active' },
+            attributes:["name","role"],
+
+            include:[{
+                model:Order,
+                status:"active",
+                attributes:["id","totalPrice","quantity"],
+
+                include:[{
+                    model:Meal,
+                    attributes:["name","price"],
+
+                    include:[{
+                        model:Restaurant,
+                        attributes:["name"]
+                    }]
+                }]
+            }]
+        })
+
+        if(!userOrders){
+            return next(new AppError("this user dont have orders",403))
+        }
+
+        res.status(200).json({
+            status:"success",
+            userOrders
+        })
+    }
+)
+
+const getOrderByid = catchAsync(
+    async(req, res, next) =>{
+        
+        const { tokenId } =req;
+
+        const { id } = req.params;
+
+        const userOrderbyId = await User.findOne({
+
+            where:{ id: tokenId },
+            where : { status: "active" },
+            attributes: ["name", "role"],
+
+            include:[{
+                model:Order,
+                where:{ id },
+
+                include:[{
+                    model:Meal,
+                    attributes:["name", "price"],
+
+                    include:[{
+                        model:Restaurant,
+                        attributes:["name"]
+                    }]
+                }]
+            }]
+        })
+
+
+
+    }
+)
+
 module.exports = {
     singUp,
     login,
     updateUser,
     deleteUser,
+    getOrderByUser,
+    getOrderByid
 }
 
 

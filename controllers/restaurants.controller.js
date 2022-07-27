@@ -30,6 +30,11 @@ const activeRestaurants = catchAsync(
         
         const restaurants = await Restaurant.findAll({
             where:{status:"active"},
+            
+            include:[{
+                model:Review,
+                attributes:["comment", "rating", "status", "userId"]
+            }]
         });
 
         res.status(200).json({
@@ -86,12 +91,64 @@ const closeRestaurant = catchAsync(
     }
 )
 
+const addReview = catchAsync(
+    async (req, res ,next) =>{
+
+        const {comment, rating} = req.body;
+        const { restaurantId } = req.params;
+        const { userActive } = req;
+
+        const newReview = await Review.create({
+            comment,
+            rating,
+            restaurantId,
+            userId: userActive.id
+        })
+
+        res.status(201).json({
+            status:"success",
+            newReview
+        })
+    }
+)
+
+
+const updateReview = catchAsync(
+    async (req, res ,next) =>{
+
+        const { review } = req;
+        const { comment, rating } = req.body;
+
+        const reviewEdited = await review.update({
+            comment,
+            rating
+        })
+
+        res.status(204).json({
+            status:"success",
+            reviewEdited
+        })
+
+    }
+)
+
+const deleteReview = catchAsync(
+    async (req, res, next) =>{
+        const { review } = req;
+        
+        await review.update ({ status: 'disabled'});
+
+        res.status(204).json({ status: 'success'});
+    }
+)
 
 module.exports = {
     newRestaurant,
     activeRestaurants,
     getRestaurantById,
     updateRestaurant,
-    closeRestaurant
-    
+    closeRestaurant,
+    addReview,
+    updateReview,
+    deleteReview
 }

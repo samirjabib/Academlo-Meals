@@ -6,7 +6,9 @@ const {
     singUp,
     deleteUser,
     login,
-    updateUser
+    updateUser,
+    getOrderByid,
+    getOrderByUser
 } = require('../controllers/users.controller');
 
 //Middlewares 
@@ -49,6 +51,16 @@ usersRouter.delete('/:id', //delete user
     userExist,
     protectUserAccount,
     deleteUser
+)
+
+usersRouter.get('/orders',
+    authentication,
+    getOrderByUser
+)
+
+usersRouter.get('/orders/:id',
+    authentication,
+    getOrderByid
 )
 
 
