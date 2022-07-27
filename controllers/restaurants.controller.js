@@ -5,8 +5,6 @@ const { Restaurant } = require('../models/restaurants.model');
 const { Review } = require('../models/reviews.model');
 
 //Utils 
-
-const { AppError } = require('../utils/appError.util');
 const { catchAsync } = require('../utils/catchAsync.util');
 
 const newRestaurant = catchAsync(

@@ -1,6 +1,6 @@
-//Models
+//Models 
 
-const { User } = require('../models/users.model');
+const { Meal } = require('../models/meals.model');
 
 //Utils
 
@@ -8,21 +8,21 @@ const { AppError } = require('../utils/appError.util');
 const { catchAsync } = require('../utils/catchAsync.util');
 
 
-const userExist = catchAsync(
-    async (req, res, next) => {
+const mealExist = catchAsync(
+    async(req, res ,next) =>{
         const { id } = req.params;
         
-        const user = await User.findOne({
-            where: { id } 
+        const meal = await Meal.findOne({
+            where:{ id }
         });
 
-        if(!user){
+        if(!meal){
             return next ( new AppError('User not found', 404))
         }
 
-        req.user = user;
+        req.meal = meal;
         next();
     }
 )
 
-module.exports = { userExist};
+module.exports = { mealExist};

@@ -16,13 +16,16 @@ const {globalErrorHandler } = require('./controllers/error.controller');
 
 //Routes
 const { usersRouter } = require('./routes/user.router');
-const { restaurantRouter } = require('./routes/restaurant.router')
-
+const { restaurantRouter } = require('./routes/restaurant.router');
+const { orderRouter } = require('./routes/orders.route');
+const { mealsRouter } = require('./routes/meal.router');
 
 
 //Endpoints
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/restaurants', restaurantRouter);
+app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/meals', mealsRouter);
 
 //Hnadle incoming unknow routes to the server
 
